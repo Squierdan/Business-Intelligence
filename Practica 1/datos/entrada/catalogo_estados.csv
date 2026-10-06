@@ -1,0 +1,8 @@
+ESTADO_ORIGEN;ESTADO_ESTANDAR;DESCRIPCION_ESTADO
+MATRICULADO;MATRICULADO;Estudiante con matrícula vigente
+EGRESADO;EGRESADO;Aprobó la malla curricular y está pendiente de titulación
+EGRESADA;EGRESADO;Aprobó la malla curricular y está pendiente de titulación
+EGR;EGRESADO;Aprobó la malla curricular y está pendiente de titulación
+GRADUADO;GRADUADO;Obtuvo el título profesional
+GRADUADA;GRADUADO;Obtuvo el título profesional
+GRD;GRADUADO;Obtuvo el título profesional
