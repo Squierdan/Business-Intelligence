@@ -1,8 +1,12 @@
 # Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data Integration
 
 Escuela Politécnica Nacional
+
 Facultad de Ingeniería de Sistemas
+
 Business Intelligence
+
+GR2SW
 
 **Integrantes**
 
