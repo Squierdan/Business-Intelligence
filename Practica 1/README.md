@@ -1,25 +1,52 @@
 # Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data Integration
 
-Escuela Politécnica Nacional
+**Universidad:** Escuela Politécnica Nacional
 
-Facultad de Ingeniería de Sistemas
+**Facultad:** Facultad de Ingeniería de Sistemas
 
-Business Intelligence
+**Asignatura:** Business Intelligence
 
-GR2SW
+**Paralelo:** GR2SW
 
-**Integrantes**
+**Integrantes:**
 
 - Elian Daniel Caizapanta Caiza
 - Brandon Javier Pallo Chango
 - Alexis Eduardo Sotomayor Llerena
 - Francisco Javier Torres Negrete
 
+**Fecha de entrega:** 13 de octubre de 2026
+
 **Herramienta:** Pentaho Data Integration Community Edition 10.2.0.0-222 con Java 21
 
-## Organización del trabajo
+---
 
-La práctica tiene tres componentes: la transformación guiada que se hizo en clase, el punto 1 del trabajo grupal, que pide agregar dos transformaciones al dataset entregado por el docente, y el punto 2, que pide diseñar un proceso ETL completo con dos tipos diferentes de fuentes de datos. Para que cada parte se pueda revisar por separado, el trabajo se dividió así:
+## Índice
+
+1. [Organización del trabajo](#1-organización-del-trabajo)
+2. [Parte 1: dataset de estudiantes](#2-parte-1-dataset-de-estudiantes)
+   1. [Práctica guiada](#21-práctica-guiada)
+   2. [Corrección de nombres y apellidos y validación de fechas](#22-corrección-de-nombres-y-apellidos-y-validación-de-fechas)
+3. [Parte 2: proceso ETL con dos fuentes externas](#3-parte-2-proceso-etl-con-dos-fuentes-externas)
+   1. [Objetivo del proceso](#31-objetivo-del-proceso)
+   2. [Fuentes de datos utilizadas](#32-fuentes-de-datos-utilizadas)
+   3. [Problemas encontrados en los datos](#33-problemas-encontrados-en-los-datos)
+   4. [Transformaciones aplicadas](#34-transformaciones-aplicadas)
+   5. [Flujo ETL desarrollado](#35-flujo-etl-desarrollado)
+   6. [Evidencia del resultado](#36-evidencia-del-resultado)
+   7. [Validación de los resultados](#37-validación-de-los-resultados)
+   8. [Relación con la arquitectura de un Data Warehouse](#38-relación-con-la-arquitectura-de-un-data-warehouse)
+4. [Conclusiones](#4-conclusiones)
+5. [Referencias](#5-referencias)
+6. [Declaración de uso de inteligencia artificial](#6-declaración-de-uso-de-inteligencia-artificial)
+
+---
+
+## 1. Organización del trabajo
+
+La práctica tiene tres componentes: la transformación guiada realizada en clase, el punto 1 del trabajo grupal, que pide agregar dos transformaciones al dataset entregado por el docente, y el punto 2, que pide diseñar un proceso ETL completo con dos tipos diferentes de fuentes de datos [1]. Para que cada componente se pueda revisar por separado, el trabajo se dividió en dos partes, como se muestra en la Tabla 1.
+
+**Tabla 1.** División del trabajo
 
 | Parte | Qué cubre | Datos utilizados | Carpeta |
 |---|---|---|---|
@@ -28,49 +55,53 @@ La práctica tiene tres componentes: la transformación guiada que se hizo en cl
 
 El dataset de estudiantes se usó únicamente para lo que la guía pide hacer sobre él. Para el punto 2 se buscaron fuentes externas reales, porque así el proceso enfrenta problemas de calidad que no fueron preparados para la clase y se puede demostrar la integración de dos formatos distintos en un mismo destino.
 
-```
-Practica 1/
-├── README.md
-├── parte1_estudiantes/
-│   ├── datos/entrada/        Excel de estudiantes y catálogo de estados
-│   ├── datos/salida/         SALIDA.xls, ESTUDIANTES_DW.xlsx, REGISTROS_OBSERVADOS.xlsx, RESUMEN_VALIDACION.xlsx
-│   ├── transformaciones/     01_ETL_Staging_Calidad.ktr, 02_ETL_Estudiantes_Nombres_Fechas.ktr
-│   ├── validacion/           validar_resultados.py
-│   └── evidencias/
-└── parte2_ventas_cafeterias/
-    ├── datos/entrada/        dirty_cafe_sales.csv, Coffee Shop Sales.xlsx
-    ├── datos/salida/         VENTAS_CONSOLIDADAS.csv, VENTAS_OBSERVADAS.xlsx, RESUMEN_VENTAS.xlsx
-    ├── transformaciones/     03_ETL_Ventas_Cafeterias.ktr
-    ├── validacion/           validar_resultados.py
-    └── evidencias/
-```
+La Tabla 2 describe el contenido de cada carpeta del repositorio. Todas las transformaciones leen y escriben con rutas relativas a partir de la variable `${Internal.Entry.Current.Directory}`, así que funcionan en cualquier equipo después de clonar el repositorio.
 
-Todas las transformaciones leen y escriben con rutas relativas a partir de `${Internal.Entry.Current.Directory}`, así que funcionan en cualquier equipo después de clonar el repositorio.
+**Tabla 2.** Estructura del repositorio
+
+| Carpeta | Contenido |
+|---|---|
+| `parte1_estudiantes/datos/entrada` | `Caso Estudiantes Fechas Cedula.xls` y `catalogo_estados.csv` |
+| `parte1_estudiantes/datos/salida` | `SALIDA.xls`, `ESTUDIANTES_DW.xlsx`, `REGISTROS_OBSERVADOS.xlsx` y `RESUMEN_VALIDACION.xlsx` |
+| `parte1_estudiantes/transformaciones` | `01_ETL_Staging_Calidad.ktr` y `02_ETL_Estudiantes_Nombres_Fechas.ktr` |
+| `parte2_ventas_cafeterias/datos/entrada` | `dirty_cafe_sales.csv` y `Coffee Shop Sales.xlsx` |
+| `parte2_ventas_cafeterias/datos/salida` | `VENTAS_CONSOLIDADAS.csv`, `VENTAS_OBSERVADAS.xlsx` y `RESUMEN_VENTAS.xlsx` |
+| `parte2_ventas_cafeterias/transformaciones` | `03_ETL_Ventas_Cafeterias.ktr` |
+| `validacion` de cada parte | Script `validar_resultados.py` que verifica las salidas |
+| `evidencias` de cada parte | Capturas de la ejecución en Spoon |
 
 ---
 
-# Parte 1: dataset de estudiantes
+## 2. Parte 1: dataset de estudiantes
 
-## Práctica guiada
+### 2.1. Práctica guiada
 
-La transformación `01_ETL_Staging_Calidad.ktr` reproduce los pasos de la guía. `Staging` lee el Excel, `CALIDAD DE DATOS` estandariza el estado académico con Replace in string y `Microsoft Excel writer` genera `SALIDA.xls`.
+La transformación `01_ETL_Staging_Calidad.ktr` reproduce los pasos de la guía [1]. El paso `Staging` lee el Excel, `CALIDAD DE DATOS` estandariza el estado académico con Replace in string y `Microsoft Excel writer` genera `SALIDA.xls`. Los reemplazos aplicados se listan en la Tabla 3. Se configuraron sin distinguir mayúsculas y por palabra completa, para que `EGR` no altere la palabra `EGRESADO`.
+
+**Tabla 3.** Estandarización del estado académico
 
 | Valor original | Valor estandarizado |
 |---|---|
 | Egresado, egresado, EGR, EGRESADA | EGRESADO |
 | Graduado, graduado, GRD | GRADUADO |
 
-Los reemplazos no distinguen mayúsculas y trabajan por palabra completa, para que `EGR` no altere la palabra `EGRESADO`. El resultado son 99 registros con tres estados: 44 matriculados, 29 egresados y 26 graduados.
+La Figura 1 muestra la ejecución sin errores: `Staging` lee 99 filas y el escritor de Excel escribe 100, que corresponden a los 99 registros más el encabezado. El resultado tiene tres estados: 44 matriculados, 29 egresados y 26 graduados.
 
 ![Ejecución de la transformación guiada](parte1_estudiantes/evidencias/01_guia_ejecucion.jpg)
 
-En la vista previa de `CALIDAD DE DATOS` el estado ya está estandarizado, pero los nombres y las fechas todavía tienen los problemas que se corrigen en el punto 1.
+**Figura 1.** Ejecución de la transformación guiada en Spoon
+
+En la Figura 2 se ve la vista previa del paso `CALIDAD DE DATOS`. El estado ya aparece estandarizado, pero los nombres y las fechas todavía tienen los problemas que se corrigen en la sección siguiente, por ejemplo `Mu~oz`, `In||s` y `´12/06/2014`.
 
 ![Vista previa de CALIDAD DE DATOS](parte1_estudiantes/evidencias/02_guia_preview_calidad.jpg)
 
-## Punto 1: corrección de nombres y apellidos y validación de fechas
+**Figura 2.** Vista previa del paso CALIDAD DE DATOS
 
-### Problemas encontrados
+### 2.2. Corrección de nombres y apellidos y validación de fechas
+
+Antes de diseñar las transformaciones se revisaron los 99 registros. La Tabla 4 resume los problemas encontrados.
+
+**Tabla 4.** Problemas del dataset de estudiantes
 
 | Problema | Ejemplos | Registros |
 |---|---|---|
@@ -82,11 +113,11 @@ En la vista previa de `CALIDAD DE DATOS` el estado ya está estandarizado, pero 
 | Cédula sin el cero inicial | `500852125`, `95258652` | 2 |
 | Estados que no concuerdan con las fechas | Graduados o egresados a los 50, 66 y 75 días de su admisión | 3 |
 
-La fecha `´12/06/2014` se interpretó como 6 de diciembre de 2014, en formato mes, día y año. Es el mismo formato de la otra fecha en texto del registro y con esa lectura el registro L000101 queda con 1800 días entre admisión y estado, igual que L000102, que tiene exactamente las mismas fechas. También se detectaron dos posibles errores de digitación, `Flilomena` y `Vilalobos`, que no se modificaron porque un nombre propio solo debe corregirse después de confirmarlo con la fuente oficial.
+La fecha `´12/06/2014` se interpretó como 6 de diciembre de 2014, en formato mes, día y año. Es el mismo formato de la otra fecha en texto del registro y, con esa lectura, el registro L000101 queda con 1800 días entre admisión y estado, igual que L000102, que tiene exactamente las mismas fechas. También se detectaron dos posibles errores de digitación, `Flilomena` y `Vilalobos`, que no se modificaron porque un nombre propio solo debe corregirse después de confirmarlo con la fuente oficial.
 
-### Transformaciones aplicadas
+La transformación `02_ETL_Estudiantes_Nombres_Fechas.ktr` aplica los pasos de la Tabla 5. Todos son pasos estándar de Pentaho Data Integration [5].
 
-La transformación `02_ETL_Estudiantes_Nombres_Fechas.ktr` aplica estos pasos:
+**Tabla 5.** Pasos de la transformación de nombres y fechas
 
 | Paso en Spoon | Tipo de paso | Función |
 |---|---|---|
@@ -99,6 +130,10 @@ La transformación `02_ETL_Estudiantes_Nombres_Fechas.ktr` aplica estos pasos:
 | Fecha de carga y Calcular dias hasta estado | Get system info y Calculator | Agregan la fecha de carga y los días entre admisión y estado |
 | Regla 1 a Regla 4 | Filter rows | Validan que el estado exista, que la fecha de estado no sea anterior a la admisión, que no haya fechas futuras y que nadie egrese o se gradúe en menos de 365 días |
 
+La Tabla 6 muestra algunos registros antes y después de la limpieza.
+
+**Tabla 6.** Ejemplos de corrección en el dataset de estudiantes
+
 | Antes | Después |
 |---|---|
 | `Sonia In\|\|s`, `Leal Leal` | `SONIA INÉS`, `LEAL LEAL` |
@@ -106,44 +141,68 @@ La transformación `02_ETL_Estudiantes_Nombres_Fechas.ktr` aplica estos pasos:
 | `500852125` | `0500852125` |
 | `01/01/2010 0:00` y `´12/06/2014` | `2010-01-01` y `2014-12-06` |
 
-### Resultado
-
-De los 99 estudiantes, 96 pasan a `ESTUDIANTES_DW.xlsx` y 3 quedan en `REGISTROS_OBSERVADOS.xlsx` porque figuran como graduados o egresados a los 50, 66 y 75 días de haber sido admitidos.
+El flujo completo se presenta en la Figura 3 y las métricas de ejecución en la Figura 4. De los 99 estudiantes, 96 pasan a `ESTUDIANTES_DW.xlsx` y 3 quedan en `REGISTROS_OBSERVADOS.xlsx` porque figuran como graduados o egresados a los 50, 66 y 75 días de haber sido admitidos.
 
 ![Flujo de la transformación de nombres y fechas](parte1_estudiantes/evidencias/03_nombres_fechas_flujo.jpg)
 
+**Figura 3.** Flujo de la transformación de nombres y fechas ejecutado en Spoon
+
 ![Métricas por paso](parte1_estudiantes/evidencias/04_nombres_fechas_metricas.jpg)
+
+**Figura 4.** Métricas por paso de la transformación de nombres y fechas
+
+La Figura 5 muestra la salida limpia, con tildes y eñes restituidas, cédula de 10 dígitos y fechas válidas. La Figura 6 muestra los tres registros observados con su motivo.
 
 ![Vista previa de ESTUDIANTES_DW](parte1_estudiantes/evidencias/05_nombres_fechas_preview_dw.jpg)
 
+**Figura 5.** Vista previa de la salida ESTUDIANTES_DW
+
 ![Vista previa de REGISTROS_OBSERVADOS](parte1_estudiantes/evidencias/06_nombres_fechas_preview_observados.jpg)
+
+**Figura 6.** Vista previa de los registros observados del dataset de estudiantes
+
+Los resultados se verificaron con el script `parte1_estudiantes/validacion/validar_resultados.py`, que repite el procesamiento en Python a partir del Excel original. La Tabla 7 resume los controles.
+
+**Tabla 7.** Validación de la Parte 1
+
+| Control | Resultado |
+|---|---|
+| Filas de entrada frente a filas de salida | 99 = 96 cargadas + 3 observadas + 0 rechazadas |
+| Coincidencia campo por campo con el cálculo independiente | 96 de 96 cargadas y 3 de 3 observadas |
+| Identificadores duplicados | 0 |
+| Registros válidos por estado | 44 matriculados, 28 egresados y 24 graduados |
 
 ---
 
-# Parte 2: proceso ETL con dos fuentes externas
+## 3. Parte 2: proceso ETL con dos fuentes externas
 
-## 1. Objetivo del proceso
+### 3.1. Objetivo del proceso
 
-Integrar en un solo conjunto de datos las ventas de dos cafeterías que registran su información en sistemas y formatos diferentes, limpiar los errores de origen, homologar los catálogos de productos y validar cada venta antes de cargarla, de modo que el resultado pueda alimentar un Data Mart de ventas.
+Integrar en un solo conjunto de datos las ventas de dos cafeterías que registran su información en sistemas y formatos diferentes, limpiar los errores de origen, homologar los catálogos de productos y validar cada venta antes de cargarla, de modo que el resultado pueda alimentar un Data Mart de ventas. Este es el propósito central de la etapa de transformación en un Data Warehouse: limpiar, conformar y entregar datos confiables desde fuentes heterogéneas [3].
 
-## 2. Fuentes de datos utilizadas
+### 3.2. Fuentes de datos utilizadas
 
-| | Fuente 1 | Fuente 2 |
+La Tabla 8 describe las dos fuentes. Ambas son públicas y se descargaron de copias publicadas en GitHub [8], [9].
+
+**Tabla 8.** Fuentes de datos de la Parte 2
+
+| Característica | Fuente 1 | Fuente 2 |
 |---|---|---|
-| Nombre | Cafe Sales, Dirty Data for Cleaning Training | Coffee Shop Sales, Maven Roasters |
-| Publicado en | [Kaggle](https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training) | [Maven Analytics Data Playground](https://mavenanalytics.io/data-playground/coffee-shop-sales) |
-| Copia descargada | [github.com/Mehdi83/cafe-sales-cleaning](https://github.com/Mehdi83/cafe-sales-cleaning) | [github.com/Ayushi0214/Datasets](https://github.com/Ayushi0214/Datasets) |
+| Nombre | Cafe Sales, Dirty Data for Cleaning Training [6] | Coffee Shop Sales, Maven Roasters [7] |
+| Publicado en | Kaggle | Maven Analytics Data Playground |
 | Tipo de fuente | Archivo de texto CSV separado por comas | Libro de Excel `.xlsx`, hoja `Transactions` |
 | Paso en PDI | CSV file input | Microsoft Excel input con el motor Excel 2007 XLSX Apache POI Streaming |
 | Registros | 10 000 | 149 116 |
 | Periodo | Enero a diciembre de 2023 | Enero a junio de 2023 |
 | Contenido | Producto, cantidad, precio unitario, total, método de pago, lugar de consumo y fecha | Fecha, hora, cantidad, local, producto, categoría, tipo y precio unitario de tres locales en Nueva York |
 
-El CSV se descargó de una copia publicada en GitHub y se comparó con una segunda copia independiente: ambas tienen el mismo contenido byte por byte. Maven Analytics publica su dataset como dominio público.
+El CSV descargado se comparó con una segunda copia independiente y ambas tienen el mismo contenido byte por byte. Maven Analytics publica su dataset como dominio público [7].
 
-## 3. Problemas encontrados en los datos
+### 3.3. Problemas encontrados en los datos
 
-**Fuente 1, CSV de ventas.** De las 10 000 transacciones, 6 911 tienen al menos un campo dañado y solo 3 089 están completas. Los errores aparecen en todas las columnas excepto el identificador:
+**Fuente 1, CSV de ventas.** De las 10 000 transacciones, 6 911 tienen al menos un campo dañado y solo 3 089 están completas. La Tabla 9 muestra cuántos valores inválidos tiene cada columna. Además, todas las columnas numéricas llegan como texto porque mezclan números con esas palabras.
+
+**Tabla 9.** Valores inválidos por campo en la fuente 1
 
 | Campo | Valor `ERROR` | Valor `UNKNOWN` | Vacío |
 |---|---|---|---|
@@ -155,9 +214,9 @@ El CSV se descargó de una copia publicada en GitHub y se comparó con una segun
 | Location | 358 | 338 | 3 265 |
 | Transaction Date | 142 | 159 | 159 |
 
-Además, todas las columnas numéricas llegan como texto porque mezclan números con esas palabras.
+**Fuente 2, Excel de Maven Roasters.** Está mejor estructurado, pero no se puede integrar tal como viene. La Tabla 10 detalla sus problemas.
 
-**Fuente 2, Excel de Maven Roasters.** Está mejor estructurado, pero no se puede integrar tal como viene:
+**Tabla 10.** Problemas de la fuente 2
 
 | Problema | Detalle |
 |---|---|
@@ -169,9 +228,13 @@ Además, todas las columnas numéricas llegan como texto porque mezclan números
 
 **Entre las dos fuentes.** Los nombres de columnas, los identificadores, el idioma y el nivel de detalle del producto son distintos: la fuente 1 vende ocho productos genéricos y la fuente 2 maneja 80 productos agrupados en 29 tipos.
 
-## 4. Transformaciones aplicadas
+### 3.4. Transformaciones aplicadas
 
-**Limpieza y recuperación de la fuente 1**
+La transformación `03_ETL_Ventas_Cafeterias.ktr` tiene tres bloques: limpieza y recuperación de la fuente 1, estandarización de la fuente 2, e integración y validación. Los pasos utilizados forman parte del catálogo estándar de Pentaho Data Integration [5].
+
+La Tabla 11 lista los pasos aplicados a la fuente 1.
+
+**Tabla 11.** Limpieza y recuperación de la fuente 1
 
 | Paso en Spoon | Tipo de paso | Función |
 |---|---|---|
@@ -184,7 +247,9 @@ Además, todas las columnas numéricas llegan como texto porque mezclan números
 
 Los catálogos se construyen con los propios datos. En las ventas completas cada producto tiene un solo precio: café 2, té 1.5, galleta 1, ensalada 5, pastel y jugo 3, sánduche y batido 4. Los precios 1, 1.5, 2 y 5 identifican un único producto, así que se pueden usar para recuperarlo. Los precios 3 y 4 son compartidos y no permiten saber cuál fue el producto vendido. Con estas reglas se completaron datos en 1 682 ventas: 471 productos, 475 precios, 410 cantidades y 432 totales.
 
-**Estandarización de la fuente 2**
+La Tabla 12 lista los pasos aplicados a la fuente 2.
+
+**Tabla 12.** Estandarización de la fuente 2
 
 | Paso en Spoon | Tipo de paso | Función |
 |---|---|---|
@@ -194,8 +259,6 @@ Los catálogos se construyen con los propios datos. En las ventas completas cada
 | Calcular total de la venta | Calculator | Calcula el total como precio unitario por cantidad |
 | Generar identificador | User defined Java expression | Antepone `MR-` al número de transacción para que no se confunda con los identificadores de la fuente 1 |
 
-**Integración y validación**
-
 Cada fuente termina en un paso de selección que deja exactamente las mismas columnas con los mismos tipos. Después, `Unir ventas` junta los dos flujos y todas las ventas pasan por las mismas reglas:
 
 1. El producto debe estar identificado.
@@ -203,25 +266,27 @@ Cada fuente termina en un paso de selección que deja exactamente las mismas col
 3. La fecha debe ser válida.
 4. El total debe ser igual a la cantidad por el precio, con una tolerancia de un centavo.
 
-Las ventas que no cumplen una regla se envían a `VENTAS_OBSERVADAS.xlsx` con su motivo. Las demás se escriben en `VENTAS_CONSOLIDADAS.csv` y se resumen por origen y categoría en `RESUMEN_VENTAS.xlsx`.
+Las ventas que no cumplen una regla se envían a `VENTAS_OBSERVADAS.xlsx` con su motivo. Las demás se escriben en `VENTAS_CONSOLIDADAS.csv` y se resumen por origen y categoría en `RESUMEN_VENTAS.xlsx`. Para que las dos fuentes se puedan analizar juntas, sus categorías se llevaron al catálogo común de la Tabla 13, que cumple el papel de una dimensión conformada [2].
 
-Catálogo común de categorías:
+**Tabla 13.** Catálogo común de categorías
 
 | Categoría común | Fuente 1 | Fuente 2 |
 |---|---|---|
 | CAFE | Coffee | Coffee |
 | TE | Tea | Tea |
 | PANADERIA Y POSTRES | Cake, Cookie | Bakery |
-| BEBIDAS FRIAS | Smoothie, Juice | |
-| COMIDA PREPARADA | Sandwich, Salad | |
-| CHOCOLATE CALIENTE | | Drinking Chocolate |
-| SABORIZANTES | | Flavours |
-| CAFE EN GRANO | | Coffee beans |
-| TE A GRANEL | | Loose Tea |
-| CHOCOLATE EMPACADO | | Packaged Chocolate |
-| MERCANCIA DE MARCA | | Branded |
+| BEBIDAS FRIAS | Smoothie, Juice | No aplica |
+| COMIDA PREPARADA | Sandwich, Salad | No aplica |
+| CHOCOLATE CALIENTE | No aplica | Drinking Chocolate |
+| SABORIZANTES | No aplica | Flavours |
+| CAFE EN GRANO | No aplica | Coffee beans |
+| TE A GRANEL | No aplica | Loose Tea |
+| CHOCOLATE EMPACADO | No aplica | Packaged Chocolate |
+| MERCANCIA DE MARCA | No aplica | Branded |
 
-## 5. Flujo ETL desarrollado
+### 3.5. Flujo ETL desarrollado
+
+La Figura 7 resume el flujo de forma conceptual. La fuente 1 pasa por la limpieza y la recuperación de valores, la fuente 2 por la estandarización, y ambas se unen antes de las reglas de validación.
 
 ```mermaid
 flowchart LR
@@ -244,11 +309,15 @@ flowchart LR
     DW --> RS[(RESUMEN_VENTAS.xlsx)]
 ```
 
-Así se ve en Spoon. La fuente 1 entra por la izquierda en la fila superior y la fuente 2 por la derecha en la fila inferior. Ambas se unen en `Unir ventas` y continúan por las reglas de validación.
+**Figura 7.** Diagrama conceptual del flujo ETL de ventas
+
+La Figura 8 muestra el mismo flujo construido en Spoon. La fuente 1 entra por la izquierda en la fila superior y la fuente 2 por la derecha en la fila inferior. Ambas se unen en `Unir ventas` y continúan por las reglas de validación.
 
 ![Flujo del ETL de ventas en Spoon](parte2_ventas_cafeterias/evidencias/01_flujo_etl_ventas.jpg)
 
-Para ejecutarlo se abre `parte2_ventas_cafeterias/transformaciones/03_ETL_Ventas_Cafeterias.ktr` en Spoon y se presiona Run. Desde la consola:
+**Figura 8.** Transformación 03_ETL_Ventas_Cafeterias en Spoon
+
+Para ejecutarlo se abre `parte2_ventas_cafeterias/transformaciones/03_ETL_Ventas_Cafeterias.ktr` en Spoon y se presiona Run. Desde la consola se usa Pan:
 
 ```bat
 cd "D:\EPN\Septimo Semestre\Business Intelligence\Pentaho\data-integration"
@@ -257,29 +326,41 @@ Pan.bat /file:"D:\EPN\Septimo Semestre\Business Intelligence\Business-Intelligen
 
 La transformación tiene configurado un tamaño de buffer de 20 000 filas entre pasos. Es necesario porque el mismo flujo de la fuente 1 alimenta al catálogo y a la búsqueda de precios: si el buffer fuera menor que las 10 000 ventas, la búsqueda esperaría al catálogo y el catálogo nunca terminaría de recibir filas.
 
-## 6. Evidencia del resultado
+### 3.6. Evidencia del resultado
 
-La ejecución en Spoon termina sin errores:
+La Figura 9 muestra la ejecución completa en Spoon, que termina sin errores.
 
 ![Ejecución del ETL de ventas](parte2_ventas_cafeterias/evidencias/02_ejecucion_spoon.jpg)
 
-Métricas por paso. Se leen 10 000 filas del CSV y 149 116 del Excel, se unen 159 116 y salen 158 180 consolidadas y 936 observadas:
+**Figura 9.** Ejecución de la transformación de ventas con su registro de eventos
+
+En la Figura 10 se ven las métricas por paso. Se leen 10 000 filas del CSV y 149 116 del Excel, se unen 159 116 y salen 158 180 consolidadas y 936 observadas.
 
 ![Métricas por paso del ETL de ventas](parte2_ventas_cafeterias/evidencias/03_metricas_pasos.jpg)
 
-Ventas de Maven Roasters ya integradas, con la categoría traducida, el producto separado de su tamaño y el total calculado:
+**Figura 10.** Métricas por paso de la transformación de ventas
+
+La Figura 11 muestra ventas de Maven Roasters ya integradas, con la categoría traducida, el producto separado de su tamaño y el total calculado.
 
 ![Vista previa de ventas de Maven Roasters](parte2_ventas_cafeterias/evidencias/04_preview_ventas_maven.jpg)
 
-Ventas de la cafetería después de la limpieza. La última columna indica qué valores se recuperaron. Las filas con `<null>` en producto son las que tienen precio 3 o 4 y no se pudieron identificar:
+**Figura 11.** Vista previa de ventas consolidadas provenientes de Maven Roasters
+
+La Figura 12 muestra ventas de la cafetería después de la limpieza. La última columna indica qué valores se recuperaron. Las filas con `<null>` en producto son las que tienen precio 3 o 4 y no se pudieron identificar.
 
 ![Vista previa de ventas de la cafetería](parte2_ventas_cafeterias/evidencias/05_preview_ventas_cafeteria.jpg)
 
-Ventas observadas con su motivo:
+**Figura 12.** Vista previa de ventas de la cafetería después de la limpieza
+
+La Figura 13 muestra las ventas observadas con el motivo por el que no pasaron la validación.
 
 ![Vista previa de ventas observadas](parte2_ventas_cafeterias/evidencias/06_preview_ventas_observadas.jpg)
 
-### Resultados
+**Figura 13.** Vista previa de las ventas observadas
+
+La Tabla 14 resume los resultados por fuente y la Tabla 15 el resumen de ventas por categoría que genera el proceso en `RESUMEN_VENTAS.xlsx`.
+
+**Tabla 14.** Resultados del proceso por fuente
 
 | Concepto | Fuente 1 CSV | Fuente 2 Excel | Total |
 |---|---|---|---|
@@ -291,7 +372,7 @@ Ventas observadas con su motivo:
 | Observadas por total inconsistente | 0 | 0 | 0 |
 | Monto vendido | 80 041.50 | 698 812.33 | 778 853.83 |
 
-Resumen de ventas por categoría:
+**Tabla 15.** Resumen de ventas por origen y categoría
 
 | Origen | Categoría | Transacciones | Unidades | Ventas |
 |---|---|---|---|---|
@@ -310,21 +391,29 @@ Resumen de ventas por categoría:
 | MAVEN ROASTERS | SABORIZANTES | 6 790 | 10 511 | 8 408.80 |
 | MAVEN ROASTERS | CHOCOLATE EMPACADO | 487 | 487 | 4 407.64 |
 
-### Validación de los resultados
+### 3.7. Validación de los resultados
 
-Además de las reglas que aplica el propio ETL, el script `parte2_ventas_cafeterias/validacion/validar_resultados.py` vuelve a procesar las dos fuentes originales en Python, sin usar nada de lo que generó Pentaho, y compara el resultado campo por campo con los archivos de salida. Se ejecutó sobre los archivos que produjo Spoon:
+Además de las reglas que aplica el propio ETL, el script `parte2_ventas_cafeterias/validacion/validar_resultados.py` vuelve a procesar las dos fuentes originales en Python, sin usar nada de lo que generó Pentaho, y compara el resultado campo por campo con los archivos de salida. Se ejecutó sobre los archivos que produjo Spoon y los controles de la Tabla 16 resultaron correctos.
 
+**Tabla 16.** Validación de la Parte 2
+
+| Control | Resultado |
+|---|---|
+| Coincidencia de `VENTAS_CONSOLIDADAS.csv` con el cálculo independiente | 158 180 de 158 180 filas, campo por campo |
+| Coincidencia de `VENTAS_OBSERVADAS.xlsx` con el cálculo independiente | 936 de 936 filas, incluido el motivo |
+| Conciliación de filas | 159 116 leídas = 158 180 consolidadas + 936 observadas |
+| Identificadores duplicados en la salida | 0 |
+| Resumen frente al detalle | 14 combinaciones de origen y categoría con un total de 778 853.83 |
+
+Para repetir la validación se ejecuta el script con Python y las librerías pandas, xlrd y openpyxl:
+
+```bat
+python "Practica 1\parte2_ventas_cafeterias\validacion\validar_resultados.py"
 ```
-[OK] VENTAS_CONSOLIDADAS.csv: 158180 filas coinciden campo por campo con el calculo independiente
-[OK] VENTAS_OBSERVADAS.xlsx: 936 filas coinciden campo por campo con el calculo independiente
-[OK] Conciliacion: 159116 filas leidas = 158180 consolidadas + 936 observadas
-[OK] Identificadores duplicados en la salida: 0
-[OK] RESUMEN_VENTAS cuadra con el detalle: 14 combinaciones de origen y categoria, ventas totales 778,853.83
-```
 
-Para repetir la validación se necesitan las librerías pandas, xlrd y openpyxl. La Parte 1 tiene su propio script en `parte1_estudiantes/validacion`.
+### 3.8. Relación con la arquitectura de un Data Warehouse
 
-## 7. Relación con la arquitectura de un Data Warehouse
+La Figura 14 ubica el proceso dentro de la arquitectura de un Data Warehouse, en la que los datos pasan de los sistemas fuente a una Staging Area, luego por la transformación y finalmente al almacén y a los Data Marts [4].
 
 ```mermaid
 flowchart LR
@@ -336,17 +425,19 @@ flowchart LR
     E --> F[Reportes y tableros]
 ```
 
-Las dos cafeterías representan los sistemas operacionales de una empresa: cada una exporta sus ventas con su propio formato, idioma y nivel de calidad. Los pasos de lectura cumplen la función de Staging Area, porque reciben los datos tal como vienen, todo como texto en el caso del CSV, para no perder información antes de procesarla. En un entorno productivo esta área sería un conjunto de tablas temporales en la base de datos.
+**Figura 14.** Ubicación del proceso en la arquitectura de un Data Warehouse
 
-La etapa de transformación es donde se resuelven las diferencias. El catálogo común de categorías funciona como una dimensión conformada: las dos fuentes quedan clasificadas con los mismos valores, así que un reporte puede comparar el café vendido en ambas sin ajustes manuales. La recuperación de valores con catálogos derivados de los propios datos es un ejemplo de regla de calidad documentada, y la columna `CAMPOS_RECUPERADOS` conserva el linaje de cada dato que no vino de origen.
+Las dos cafeterías representan los sistemas operacionales de una empresa: cada una exporta sus ventas con su propio formato, idioma y nivel de calidad. Los pasos de lectura cumplen la función de Staging Area, porque reciben los datos tal como vienen, todo como texto en el caso del CSV, para no perder información antes de procesarla. En un entorno productivo esta área sería un conjunto de tablas temporales en la base de datos [3].
 
-Las ventas que no superan las reglas no se pierden ni contaminan el almacén: quedan en una salida de cuarentena con su motivo para que el área responsable las revise. Por tratarse de una práctica, la carga final se hace en archivos. En una solución real `VENTAS_CONSOLIDADAS` se cargaría con Table output a una tabla de hechos.
+La etapa de transformación es donde se resuelven las diferencias. El catálogo común de categorías funciona como una dimensión conformada: las dos fuentes quedan clasificadas con los mismos valores, así que un reporte puede comparar el café vendido en ambas sin ajustes manuales [2]. La recuperación de valores con catálogos derivados de los propios datos es una regla de calidad documentada, y la columna `CAMPOS_RECUPERADOS` conserva el linaje de cada dato que no vino de origen.
 
-Con estos datos se puede construir un modelo estrella con una tabla de hechos de ventas, cuyas medidas serían cantidad, precio unitario y total, y las dimensiones fecha, producto con su categoría, detalle y tamaño, sucursal, canal de consumo, método de pago y origen. `RESUMEN_VENTAS.xlsx` es un primer ejemplo de las consultas que respondería el Data Mart.
+Las ventas que no superan las reglas no se pierden ni contaminan el almacén: quedan en una salida de cuarentena con su motivo para que el área responsable las revise. Por tratarse de una práctica, la carga final se hace en archivos. En una solución real `VENTAS_CONSOLIDADAS` se cargaría con el paso Table output a una tabla de hechos.
+
+Con estos datos se puede construir un modelo estrella [2] con una tabla de hechos de ventas, cuyas medidas serían cantidad, precio unitario y total, y las dimensiones fecha, producto con su categoría, detalle y tamaño, sucursal, canal de consumo, método de pago y origen. `RESUMEN_VENTAS.xlsx` es un primer ejemplo de las consultas que respondería el Data Mart.
 
 ---
 
-## Conclusiones
+## 4. Conclusiones
 
 En la Parte 1, separar la lectura, la transformación y la carga permitió corregir los nombres y las fechas del dataset de estudiantes antes de llegar al destino. Las reglas de validación detectaron tres estudiantes con fechas que no tienen sentido para su estado académico.
 
@@ -355,3 +446,33 @@ En la Parte 2 se integraron dos fuentes reales con formatos distintos. Casi siet
 Homologar las categorías en un catálogo común es lo que hace posible analizar juntas dos fuentes que no fueron diseñadas para integrarse.
 
 La conciliación de conteos y la comparación con un cálculo independiente dan seguridad de que las salidas están completas y son correctas.
+
+---
+
+## 5. Referencias
+
+[1] Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas, "Práctica 1. Implementación de un proceso ETL y Staging Area con Pentaho Data Integration," guía de práctica de la asignatura Business Intelligence, Quito, Ecuador, 2026.
+
+[2] R. Kimball y M. Ross, *The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling*, 3.ª ed. Indianapolis, IN, EE. UU.: Wiley, 2013.
+
+[3] R. Kimball y J. Caserta, *The Data Warehouse ETL Toolkit: Practical Techniques for Extracting, Cleaning, Conforming, and Delivering Data*. Indianapolis, IN, EE. UU.: Wiley, 2004.
+
+[4] P. Bhatia, *Data Mining and Data Warehousing: Principles and Practical Techniques*. Cambridge, Reino Unido: Cambridge University Press, 2019.
+
+[5] Hitachi Vantara, "PDI transformation steps," *Pentaho Data Integration 10.2 Documentation*. [En línea]. Disponible en: https://docs.pentaho.com/pdia-data-integration/10.2-data-integration/pdi-transformation-steps-reference-overview. [Accedido: 13-oct-2026].
+
+[6] ahmedmohamed2003, "Cafe Sales - Dirty Data for Cleaning Training," Kaggle, 2025. [En línea]. Disponible en: https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training. [Accedido: 13-oct-2026].
+
+[7] Maven Analytics, "Coffee Shop Sales," *Maven Analytics Data Playground*. [En línea]. Disponible en: https://mavenanalytics.io/data-playground/coffee-shop-sales. [Accedido: 13-oct-2026].
+
+[8] Mehdi83, "cafe-sales-cleaning," repositorio de GitHub. [En línea]. Disponible en: https://github.com/Mehdi83/cafe-sales-cleaning. [Accedido: 13-oct-2026].
+
+[9] Ayushi0214, "Datasets," repositorio de GitHub. [En línea]. Disponible en: https://github.com/Ayushi0214/Datasets. [Accedido: 13-oct-2026].
+
+---
+
+## 6. Declaración de uso de inteligencia artificial
+
+En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en la redacción y el formato del informe en Markdown.
+
+**Porcentaje de uso de inteligencia artificial: 30 %**
