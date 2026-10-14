@@ -50,25 +50,27 @@ La práctica tiene tres componentes: la transformación guiada realizada en clas
 
 | Parte | Qué cubre | Datos utilizados | Carpeta |
 |---|---|---|---|
-| Parte 1 | Práctica guiada y punto 1 del trabajo grupal | `Caso Estudiantes Fechas Cedula.xls`, entregado en clase | `parte1_estudiantes` |
-| Parte 2 | Punto 2 del trabajo grupal | Dos datasets públicos de ventas de cafeterías: un CSV con datos sucios y un libro de Excel | `parte2_ventas_cafeterias` |
+| Parte 1 | Práctica guiada y punto 1 del trabajo grupal | `Caso Estudiantes Fechas Cedula.xls`, entregado en clase | [parte1_estudiantes](parte1_estudiantes/) |
+| Parte 2 | Punto 2 del trabajo grupal | Dos datasets públicos de ventas de cafeterías: un CSV con datos sucios y un libro de Excel | [parte2_ventas_cafeterias](parte2_ventas_cafeterias/) |
 
 El dataset de estudiantes se usó únicamente para lo que la guía pide hacer sobre él. Para el punto 2 se buscaron fuentes externas reales, porque así el proceso enfrenta problemas de calidad que no fueron preparados para la clase y se puede demostrar la integración de dos formatos distintos en un mismo destino.
 
-La Tabla 2 describe el contenido de cada carpeta del repositorio. Todas las transformaciones leen y escriben con rutas relativas a partir de la variable `${Internal.Entry.Current.Directory}`, así que funcionan en cualquier equipo después de clonar el repositorio.
+La Tabla 2 describe el contenido de cada carpeta del repositorio, con enlaces directos a cada carpeta y archivo. Todas las transformaciones leen y escriben con rutas relativas a partir de la variable `${Internal.Entry.Current.Directory}`, así que funcionan en cualquier equipo después de clonar el repositorio.
 
 **Tabla 2.** Estructura del repositorio
 
-| Carpeta | Contenido |
-|---|---|
-| `parte1_estudiantes/datos/entrada` | `Caso Estudiantes Fechas Cedula.xls` y `catalogo_estados.csv` |
-| `parte1_estudiantes/datos/salida` | `SALIDA.xls`, `ESTUDIANTES_DW.xlsx`, `REGISTROS_OBSERVADOS.xlsx` y `RESUMEN_VALIDACION.xlsx` |
-| `parte1_estudiantes/transformaciones` | `01_ETL_Staging_Calidad.ktr` y `02_ETL_Estudiantes_Nombres_Fechas.ktr` |
-| `parte2_ventas_cafeterias/datos/entrada` | `dirty_cafe_sales.csv` y `Coffee Shop Sales.xlsx` |
-| `parte2_ventas_cafeterias/datos/salida` | `VENTAS_CONSOLIDADAS.csv`, `VENTAS_OBSERVADAS.xlsx` y `RESUMEN_VENTAS.xlsx` |
-| `parte2_ventas_cafeterias/transformaciones` | `03_ETL_Ventas_Cafeterias.ktr` |
-| `validacion` de cada parte | Script `validar_resultados.py` que verifica las salidas |
-| `evidencias` de cada parte | Capturas de la ejecución en Spoon |
+| Parte | Carpeta | Archivos |
+|---|---|---|
+| Parte 1 | [Fuentes de datos](parte1_estudiantes/datos/entrada/) | [Caso Estudiantes Fechas Cedula.xls](parte1_estudiantes/datos/entrada/Caso%20Estudiantes%20Fechas%20Cedula.xls), [catalogo_estados.csv](parte1_estudiantes/datos/entrada/catalogo_estados.csv) |
+| Parte 1 | [Salidas obtenidas](parte1_estudiantes/datos/salida/) | [SALIDA.xls](parte1_estudiantes/datos/salida/SALIDA.xls), [ESTUDIANTES_DW.xlsx](parte1_estudiantes/datos/salida/ESTUDIANTES_DW.xlsx), [REGISTROS_OBSERVADOS.xlsx](parte1_estudiantes/datos/salida/REGISTROS_OBSERVADOS.xlsx), [RESUMEN_VALIDACION.xlsx](parte1_estudiantes/datos/salida/RESUMEN_VALIDACION.xlsx) |
+| Parte 1 | [Transformaciones](parte1_estudiantes/transformaciones/) | [01_ETL_Staging_Calidad.ktr](parte1_estudiantes/transformaciones/01_ETL_Staging_Calidad.ktr), [02_ETL_Estudiantes_Nombres_Fechas.ktr](parte1_estudiantes/transformaciones/02_ETL_Estudiantes_Nombres_Fechas.ktr) |
+| Parte 1 | [Figuras](parte1_estudiantes/figuras/) | Figuras 1 a 6 del informe |
+| Parte 1 | [Validación](parte1_estudiantes/validacion/) | [validar_resultados.py](parte1_estudiantes/validacion/validar_resultados.py) |
+| Parte 2 | [Fuentes de datos](parte2_ventas_cafeterias/datos/entrada/) | [dirty_cafe_sales.csv](parte2_ventas_cafeterias/datos/entrada/dirty_cafe_sales.csv), [Coffee Shop Sales.xlsx](parte2_ventas_cafeterias/datos/entrada/Coffee%20Shop%20Sales.xlsx) |
+| Parte 2 | [Salidas obtenidas](parte2_ventas_cafeterias/datos/salida/) | [VENTAS_CONSOLIDADAS.csv](parte2_ventas_cafeterias/datos/salida/VENTAS_CONSOLIDADAS.csv), [VENTAS_OBSERVADAS.xlsx](parte2_ventas_cafeterias/datos/salida/VENTAS_OBSERVADAS.xlsx), [RESUMEN_VENTAS.xlsx](parte2_ventas_cafeterias/datos/salida/RESUMEN_VENTAS.xlsx) |
+| Parte 2 | [Transformaciones](parte2_ventas_cafeterias/transformaciones/) | [03_ETL_Ventas_Cafeterias.ktr](parte2_ventas_cafeterias/transformaciones/03_ETL_Ventas_Cafeterias.ktr) |
+| Parte 2 | [Figuras](parte2_ventas_cafeterias/figuras/) | Figuras 8 a 13 del informe |
+| Parte 2 | [Validación](parte2_ventas_cafeterias/validacion/) | [validar_resultados.py](parte2_ventas_cafeterias/validacion/validar_resultados.py) |
 
 ---
 
@@ -76,7 +78,7 @@ La Tabla 2 describe el contenido de cada carpeta del repositorio. Todas las tran
 
 ### 2.1. Práctica guiada
 
-La transformación `01_ETL_Staging_Calidad.ktr` reproduce los pasos de la guía [1]. El paso `Staging` lee el Excel, `CALIDAD DE DATOS` estandariza el estado académico con Replace in string y `Microsoft Excel writer` genera `SALIDA.xls`. Los reemplazos aplicados se listan en la Tabla 3. Se configuraron sin distinguir mayúsculas y por palabra completa, para que `EGR` no altere la palabra `EGRESADO`.
+La transformación [01_ETL_Staging_Calidad.ktr](parte1_estudiantes/transformaciones/01_ETL_Staging_Calidad.ktr) reproduce los pasos de la guía [1]. El paso `Staging` lee el Excel, `CALIDAD DE DATOS` estandariza el estado académico con Replace in string y `Microsoft Excel writer` genera [SALIDA.xls](parte1_estudiantes/datos/salida/SALIDA.xls). Los reemplazos aplicados se listan en la Tabla 3. Se configuraron sin distinguir mayúsculas y por palabra completa, para que `EGR` no altere la palabra `EGRESADO`.
 
 **Tabla 3.** Estandarización del estado académico
 
@@ -87,19 +89,19 @@ La transformación `01_ETL_Staging_Calidad.ktr` reproduce los pasos de la guía 
 
 La Figura 1 muestra la ejecución sin errores: `Staging` lee 99 filas y el escritor de Excel escribe 100, que corresponden a los 99 registros más el encabezado. El resultado tiene tres estados: 44 matriculados, 29 egresados y 26 graduados.
 
-![Ejecución de la transformación guiada](parte1_estudiantes/evidencias/01_guia_ejecucion.jpg)
+[![Ejecución de la transformación guiada](parte1_estudiantes/figuras/01_guia_ejecucion.jpg)](parte1_estudiantes/figuras/01_guia_ejecucion.jpg)
 
-**Figura 1.** Ejecución de la transformación guiada en Spoon
+**Figura 1.** Ejecución de la transformación guiada en Spoon. Archivo: [01_guia_ejecucion.jpg](parte1_estudiantes/figuras/01_guia_ejecucion.jpg)
 
 En la Figura 2 se ve la vista previa del paso `CALIDAD DE DATOS`. El estado ya aparece estandarizado, pero los nombres y las fechas todavía tienen los problemas que se corrigen en la sección siguiente, por ejemplo `Mu~oz`, `In||s` y `´12/06/2014`.
 
-![Vista previa de CALIDAD DE DATOS](parte1_estudiantes/evidencias/02_guia_preview_calidad.jpg)
+[![Vista previa de CALIDAD DE DATOS](parte1_estudiantes/figuras/02_guia_preview_calidad.jpg)](parte1_estudiantes/figuras/02_guia_preview_calidad.jpg)
 
-**Figura 2.** Vista previa del paso CALIDAD DE DATOS
+**Figura 2.** Vista previa del paso CALIDAD DE DATOS. Archivo: [02_guia_preview_calidad.jpg](parte1_estudiantes/figuras/02_guia_preview_calidad.jpg)
 
 ### 2.2. Corrección de nombres y apellidos y validación de fechas
 
-Antes de diseñar las transformaciones se revisaron los 99 registros. La Tabla 4 resume los problemas encontrados.
+Antes de diseñar las transformaciones se revisaron los 99 registros del archivo [Caso Estudiantes Fechas Cedula.xls](parte1_estudiantes/datos/entrada/Caso%20Estudiantes%20Fechas%20Cedula.xls). La Tabla 4 resume los problemas encontrados.
 
 **Tabla 4.** Problemas del dataset de estudiantes
 
@@ -115,7 +117,7 @@ Antes de diseñar las transformaciones se revisaron los 99 registros. La Tabla 4
 
 La fecha `´12/06/2014` se interpretó como 6 de diciembre de 2014, en formato mes, día y año. Es el mismo formato de la otra fecha en texto del registro y, con esa lectura, el registro L000101 queda con 1800 días entre admisión y estado, igual que L000102, que tiene exactamente las mismas fechas. También se detectaron dos posibles errores de digitación, `Flilomena` y `Vilalobos`, que no se modificaron porque un nombre propio solo debe corregirse después de confirmarlo con la fuente oficial.
 
-La transformación `02_ETL_Estudiantes_Nombres_Fechas.ktr` aplica los pasos de la Tabla 5. Todos son pasos estándar de Pentaho Data Integration [5].
+La transformación [02_ETL_Estudiantes_Nombres_Fechas.ktr](parte1_estudiantes/transformaciones/02_ETL_Estudiantes_Nombres_Fechas.ktr) aplica los pasos de la Tabla 5. Todos son pasos estándar de Pentaho Data Integration [5].
 
 **Tabla 5.** Pasos de la transformación de nombres y fechas
 
@@ -123,7 +125,7 @@ La transformación `02_ETL_Estudiantes_Nombres_Fechas.ktr` aplica los pasos de l
 |---|---|---|
 | Corregir nombres y apellidos | Replace in string | Reemplaza `\|\|` por é y `~` por ñ, reduce los espacios repetidos y unifica `Semi Presencial` como `SEMIPRESENCIAL` |
 | Estandarizar texto | String operations | Quita espacios sobrantes y convierte a mayúsculas |
-| Homologar estado con catalogo | Stream lookup | Cruza el estado con `catalogo_estados.csv` para obtener el valor oficial y su descripción |
+| Homologar estado con catalogo | Stream lookup | Cruza el estado con [catalogo_estados.csv](parte1_estudiantes/datos/entrada/catalogo_estados.csv) para obtener el valor oficial y su descripción |
 | Limpiar formato de fechas | Replace in string | Quita caracteres extraños, pasa las fechas de mes/día/año a año/mes/día y descarta la hora |
 | Validar formato de fechas | Filter rows | Envía a `RECHAZOS_FORMATO_FECHA.xlsx` las fechas que no se pudieron interpretar |
 | Convertir tipos de fecha y cedula | Select values | Convierte las fechas a tipo fecha y la cédula a texto de 10 dígitos |
@@ -141,27 +143,27 @@ La Tabla 6 muestra algunos registros antes y después de la limpieza.
 | `500852125` | `0500852125` |
 | `01/01/2010 0:00` y `´12/06/2014` | `2010-01-01` y `2014-12-06` |
 
-El flujo completo se presenta en la Figura 3 y las métricas de ejecución en la Figura 4. De los 99 estudiantes, 96 pasan a `ESTUDIANTES_DW.xlsx` y 3 quedan en `REGISTROS_OBSERVADOS.xlsx` porque figuran como graduados o egresados a los 50, 66 y 75 días de haber sido admitidos.
+El flujo completo se presenta en la Figura 3 y las métricas de ejecución en la Figura 4. De los 99 estudiantes, 96 pasan a [ESTUDIANTES_DW.xlsx](parte1_estudiantes/datos/salida/ESTUDIANTES_DW.xlsx) y 3 quedan en [REGISTROS_OBSERVADOS.xlsx](parte1_estudiantes/datos/salida/REGISTROS_OBSERVADOS.xlsx) porque figuran como graduados o egresados a los 50, 66 y 75 días de haber sido admitidos.
 
-![Flujo de la transformación de nombres y fechas](parte1_estudiantes/evidencias/03_nombres_fechas_flujo.jpg)
+[![Flujo de la transformación de nombres y fechas](parte1_estudiantes/figuras/03_nombres_fechas_flujo.jpg)](parte1_estudiantes/figuras/03_nombres_fechas_flujo.jpg)
 
-**Figura 3.** Flujo de la transformación de nombres y fechas ejecutado en Spoon
+**Figura 3.** Flujo de la transformación de nombres y fechas ejecutado en Spoon. Archivo: [03_nombres_fechas_flujo.jpg](parte1_estudiantes/figuras/03_nombres_fechas_flujo.jpg)
 
-![Métricas por paso](parte1_estudiantes/evidencias/04_nombres_fechas_metricas.jpg)
+[![Métricas por paso](parte1_estudiantes/figuras/04_nombres_fechas_metricas.jpg)](parte1_estudiantes/figuras/04_nombres_fechas_metricas.jpg)
 
-**Figura 4.** Métricas por paso de la transformación de nombres y fechas
+**Figura 4.** Métricas por paso de la transformación de nombres y fechas. Archivo: [04_nombres_fechas_metricas.jpg](parte1_estudiantes/figuras/04_nombres_fechas_metricas.jpg)
 
 La Figura 5 muestra la salida limpia, con tildes y eñes restituidas, cédula de 10 dígitos y fechas válidas. La Figura 6 muestra los tres registros observados con su motivo.
 
-![Vista previa de ESTUDIANTES_DW](parte1_estudiantes/evidencias/05_nombres_fechas_preview_dw.jpg)
+[![Vista previa de ESTUDIANTES_DW](parte1_estudiantes/figuras/05_nombres_fechas_preview_dw.jpg)](parte1_estudiantes/figuras/05_nombres_fechas_preview_dw.jpg)
 
-**Figura 5.** Vista previa de la salida ESTUDIANTES_DW
+**Figura 5.** Vista previa de la salida ESTUDIANTES_DW. Archivo: [05_nombres_fechas_preview_dw.jpg](parte1_estudiantes/figuras/05_nombres_fechas_preview_dw.jpg)
 
-![Vista previa de REGISTROS_OBSERVADOS](parte1_estudiantes/evidencias/06_nombres_fechas_preview_observados.jpg)
+[![Vista previa de REGISTROS_OBSERVADOS](parte1_estudiantes/figuras/06_nombres_fechas_preview_observados.jpg)](parte1_estudiantes/figuras/06_nombres_fechas_preview_observados.jpg)
 
-**Figura 6.** Vista previa de los registros observados del dataset de estudiantes
+**Figura 6.** Vista previa de los registros observados del dataset de estudiantes. Archivo: [06_nombres_fechas_preview_observados.jpg](parte1_estudiantes/figuras/06_nombres_fechas_preview_observados.jpg)
 
-Los resultados se verificaron con el script `parte1_estudiantes/validacion/validar_resultados.py`, que repite el procesamiento en Python a partir del Excel original. La Tabla 7 resume los controles.
+Los resultados se verificaron con el script [validar_resultados.py](parte1_estudiantes/validacion/validar_resultados.py) de la Parte 1, que repite el procesamiento en Python a partir del Excel original. La Tabla 7 resume los controles.
 
 **Tabla 7.** Validación de la Parte 1
 
@@ -170,7 +172,7 @@ Los resultados se verificaron con el script `parte1_estudiantes/validacion/valid
 | Filas de entrada frente a filas de salida | 99 = 96 cargadas + 3 observadas + 0 rechazadas |
 | Coincidencia campo por campo con el cálculo independiente | 96 de 96 cargadas y 3 de 3 observadas |
 | Identificadores duplicados | 0 |
-| Registros válidos por estado | 44 matriculados, 28 egresados y 24 graduados |
+| Registros válidos por estado según [RESUMEN_VALIDACION.xlsx](parte1_estudiantes/datos/salida/RESUMEN_VALIDACION.xlsx) | 44 matriculados, 28 egresados y 24 graduados |
 
 ---
 
@@ -193,6 +195,7 @@ La Tabla 8 describe las dos fuentes. Ambas son públicas y se descargaron de cop
 | Tipo de fuente | Archivo de texto CSV separado por comas | Libro de Excel `.xlsx`, hoja `Transactions` |
 | Paso en PDI | CSV file input | Microsoft Excel input con el motor Excel 2007 XLSX Apache POI Streaming |
 | Registros | 10 000 | 149 116 |
+| Archivo en el repositorio | [dirty_cafe_sales.csv](parte2_ventas_cafeterias/datos/entrada/dirty_cafe_sales.csv) | [Coffee Shop Sales.xlsx](parte2_ventas_cafeterias/datos/entrada/Coffee%20Shop%20Sales.xlsx) |
 | Periodo | Enero a diciembre de 2023 | Enero a junio de 2023 |
 | Contenido | Producto, cantidad, precio unitario, total, método de pago, lugar de consumo y fecha | Fecha, hora, cantidad, local, producto, categoría, tipo y precio unitario de tres locales en Nueva York |
 
@@ -230,7 +233,7 @@ El CSV descargado se comparó con una segunda copia independiente y ambas tienen
 
 ### 3.4. Transformaciones aplicadas
 
-La transformación `03_ETL_Ventas_Cafeterias.ktr` tiene tres bloques: limpieza y recuperación de la fuente 1, estandarización de la fuente 2, e integración y validación. Los pasos utilizados forman parte del catálogo estándar de Pentaho Data Integration [5].
+La transformación [03_ETL_Ventas_Cafeterias.ktr](parte2_ventas_cafeterias/transformaciones/03_ETL_Ventas_Cafeterias.ktr) tiene tres bloques: limpieza y recuperación de la fuente 1, estandarización de la fuente 2, e integración y validación. Los pasos utilizados forman parte del catálogo estándar de Pentaho Data Integration [5].
 
 La Tabla 11 lista los pasos aplicados a la fuente 1.
 
@@ -266,7 +269,7 @@ Cada fuente termina en un paso de selección que deja exactamente las mismas col
 3. La fecha debe ser válida.
 4. El total debe ser igual a la cantidad por el precio, con una tolerancia de un centavo.
 
-Las ventas que no cumplen una regla se envían a `VENTAS_OBSERVADAS.xlsx` con su motivo. Las demás se escriben en `VENTAS_CONSOLIDADAS.csv` y se resumen por origen y categoría en `RESUMEN_VENTAS.xlsx`. Para que las dos fuentes se puedan analizar juntas, sus categorías se llevaron al catálogo común de la Tabla 13, que cumple el papel de una dimensión conformada [2].
+Las ventas que no cumplen una regla se envían a [VENTAS_OBSERVADAS.xlsx](parte2_ventas_cafeterias/datos/salida/VENTAS_OBSERVADAS.xlsx) con su motivo. Las demás se escriben en [VENTAS_CONSOLIDADAS.csv](parte2_ventas_cafeterias/datos/salida/VENTAS_CONSOLIDADAS.csv) y se resumen por origen y categoría en [RESUMEN_VENTAS.xlsx](parte2_ventas_cafeterias/datos/salida/RESUMEN_VENTAS.xlsx). Para que las dos fuentes se puedan analizar juntas, sus categorías se llevaron al catálogo común de la Tabla 13, que cumple el papel de una dimensión conformada [2].
 
 **Tabla 13.** Catálogo común de categorías
 
@@ -313,11 +316,11 @@ flowchart LR
 
 La Figura 8 muestra el mismo flujo construido en Spoon. La fuente 1 entra por la izquierda en la fila superior y la fuente 2 por la derecha en la fila inferior. Ambas se unen en `Unir ventas` y continúan por las reglas de validación.
 
-![Flujo del ETL de ventas en Spoon](parte2_ventas_cafeterias/evidencias/01_flujo_etl_ventas.jpg)
+[![Flujo del ETL de ventas en Spoon](parte2_ventas_cafeterias/figuras/01_flujo_etl_ventas.jpg)](parte2_ventas_cafeterias/figuras/01_flujo_etl_ventas.jpg)
 
-**Figura 8.** Transformación 03_ETL_Ventas_Cafeterias en Spoon
+**Figura 8.** Transformación 03_ETL_Ventas_Cafeterias en Spoon. Archivo: [01_flujo_etl_ventas.jpg](parte2_ventas_cafeterias/figuras/01_flujo_etl_ventas.jpg)
 
-Para ejecutarlo se abre `parte2_ventas_cafeterias/transformaciones/03_ETL_Ventas_Cafeterias.ktr` en Spoon y se presiona Run. Desde la consola se usa Pan:
+Para ejecutarlo se abre [03_ETL_Ventas_Cafeterias.ktr](parte2_ventas_cafeterias/transformaciones/03_ETL_Ventas_Cafeterias.ktr) en Spoon y se presiona Run. Desde la consola se usa Pan:
 
 ```bat
 cd "D:\EPN\Septimo Semestre\Business Intelligence\Pentaho\data-integration"
@@ -330,35 +333,35 @@ La transformación tiene configurado un tamaño de buffer de 20 000 filas entre 
 
 La Figura 9 muestra la ejecución completa en Spoon, que termina sin errores.
 
-![Ejecución del ETL de ventas](parte2_ventas_cafeterias/evidencias/02_ejecucion_spoon.jpg)
+[![Ejecución del ETL de ventas](parte2_ventas_cafeterias/figuras/02_ejecucion_spoon.jpg)](parte2_ventas_cafeterias/figuras/02_ejecucion_spoon.jpg)
 
-**Figura 9.** Ejecución de la transformación de ventas con su registro de eventos
+**Figura 9.** Ejecución de la transformación de ventas con su registro de eventos. Archivo: [02_ejecucion_spoon.jpg](parte2_ventas_cafeterias/figuras/02_ejecucion_spoon.jpg)
 
 En la Figura 10 se ven las métricas por paso. Se leen 10 000 filas del CSV y 149 116 del Excel, se unen 159 116 y salen 158 180 consolidadas y 936 observadas.
 
-![Métricas por paso del ETL de ventas](parte2_ventas_cafeterias/evidencias/03_metricas_pasos.jpg)
+[![Métricas por paso del ETL de ventas](parte2_ventas_cafeterias/figuras/03_metricas_pasos.jpg)](parte2_ventas_cafeterias/figuras/03_metricas_pasos.jpg)
 
-**Figura 10.** Métricas por paso de la transformación de ventas
+**Figura 10.** Métricas por paso de la transformación de ventas. Archivo: [03_metricas_pasos.jpg](parte2_ventas_cafeterias/figuras/03_metricas_pasos.jpg)
 
 La Figura 11 muestra ventas de Maven Roasters ya integradas, con la categoría traducida, el producto separado de su tamaño y el total calculado.
 
-![Vista previa de ventas de Maven Roasters](parte2_ventas_cafeterias/evidencias/04_preview_ventas_maven.jpg)
+[![Vista previa de ventas de Maven Roasters](parte2_ventas_cafeterias/figuras/04_preview_ventas_maven.jpg)](parte2_ventas_cafeterias/figuras/04_preview_ventas_maven.jpg)
 
-**Figura 11.** Vista previa de ventas consolidadas provenientes de Maven Roasters
+**Figura 11.** Vista previa de ventas consolidadas provenientes de Maven Roasters. Archivo: [04_preview_ventas_maven.jpg](parte2_ventas_cafeterias/figuras/04_preview_ventas_maven.jpg)
 
 La Figura 12 muestra ventas de la cafetería después de la limpieza. La última columna indica qué valores se recuperaron. Las filas con `<null>` en producto son las que tienen precio 3 o 4 y no se pudieron identificar.
 
-![Vista previa de ventas de la cafetería](parte2_ventas_cafeterias/evidencias/05_preview_ventas_cafeteria.jpg)
+[![Vista previa de ventas de la cafetería](parte2_ventas_cafeterias/figuras/05_preview_ventas_cafeteria.jpg)](parte2_ventas_cafeterias/figuras/05_preview_ventas_cafeteria.jpg)
 
-**Figura 12.** Vista previa de ventas de la cafetería después de la limpieza
+**Figura 12.** Vista previa de ventas de la cafetería después de la limpieza. Archivo: [05_preview_ventas_cafeteria.jpg](parte2_ventas_cafeterias/figuras/05_preview_ventas_cafeteria.jpg)
 
 La Figura 13 muestra las ventas observadas con el motivo por el que no pasaron la validación.
 
-![Vista previa de ventas observadas](parte2_ventas_cafeterias/evidencias/06_preview_ventas_observadas.jpg)
+[![Vista previa de ventas observadas](parte2_ventas_cafeterias/figuras/06_preview_ventas_observadas.jpg)](parte2_ventas_cafeterias/figuras/06_preview_ventas_observadas.jpg)
 
-**Figura 13.** Vista previa de las ventas observadas
+**Figura 13.** Vista previa de las ventas observadas. Archivo: [06_preview_ventas_observadas.jpg](parte2_ventas_cafeterias/figuras/06_preview_ventas_observadas.jpg)
 
-La Tabla 14 resume los resultados por fuente y la Tabla 15 el resumen de ventas por categoría que genera el proceso en `RESUMEN_VENTAS.xlsx`.
+La Tabla 14 resume los resultados por fuente y la Tabla 15 el resumen de ventas por categoría que genera el proceso en [RESUMEN_VENTAS.xlsx](parte2_ventas_cafeterias/datos/salida/RESUMEN_VENTAS.xlsx).
 
 **Tabla 14.** Resultados del proceso por fuente
 
@@ -393,7 +396,7 @@ La Tabla 14 resume los resultados por fuente y la Tabla 15 el resumen de ventas 
 
 ### 3.7. Validación de los resultados
 
-Además de las reglas que aplica el propio ETL, el script `parte2_ventas_cafeterias/validacion/validar_resultados.py` vuelve a procesar las dos fuentes originales en Python, sin usar nada de lo que generó Pentaho, y compara el resultado campo por campo con los archivos de salida. Se ejecutó sobre los archivos que produjo Spoon y los controles de la Tabla 16 resultaron correctos.
+Además de las reglas que aplica el propio ETL, el script [validar_resultados.py](parte2_ventas_cafeterias/validacion/validar_resultados.py) de la Parte 2 vuelve a procesar las dos fuentes originales en Python, sin usar nada de lo que generó Pentaho, y compara el resultado campo por campo con los archivos de salida. Se ejecutó sobre los archivos que produjo Spoon y los controles de la Tabla 16 resultaron correctos.
 
 **Tabla 16.** Validación de la Parte 2
 
