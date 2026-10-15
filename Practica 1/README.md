@@ -476,6 +476,6 @@ La conciliación de conteos y la comparación con un cálculo independiente dan 
 
 ## 6. Declaración de uso de inteligencia artificial
 
-En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en la redacción y el formato del informe en Markdown.
+En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en la redacción y el formato del informe en Markdown. El resto fue realizado por los estudiantes a cargo del informe.
 
 **Porcentaje de uso de inteligencia artificial: 30 %**
