@@ -15,7 +15,7 @@
 - Alexis Eduardo Sotomayor Llerena
 - Francisco Javier Torres Negrete
 
-**Fecha de entrega:** 14 de octubre de 2026
+**Fecha de entrega:** 20 de octubre de 2026
 
 **Herramientas:** Pentaho Data Integration Community Edition 10.2.0.0-222 con Java 21, PostgreSQL 17 y pgAdmin 4
 
