@@ -446,6 +446,7 @@ Incluir un filtro de validación con una salida de registros observados hace que
 
 Los scripts de validación, que repiten el cálculo de forma independiente, dan seguridad de que lo cargado en PostgreSQL y en los archivos de salida es correcto.
 
+
 ---
 
 ## 5. Referencias
