@@ -470,4 +470,4 @@ Los scripts de validación, que repiten el cálculo de forma independiente, dan 
 
 En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo para la redaccion del informe markdown. El resto como capturas y ejecucion paso a paso fue autoría de los estudiantes responsables de este informe.
 
-**Porcentaje de uso de inteligencia artificial: 30 %**
+**Porcentaje de uso de inteligencia artificial: 30% %**
