@@ -15,7 +15,7 @@
 - Alexis Eduardo Sotomayor Llerena
 - Francisco Javier Torres Negrete
 
-**Fecha de entrega:** 20 de octubre de 2026
+**Fecha de entrega:** 27 de octubre de 2026
 
 **Herramientas:** PostgreSQL 17, pgAdmin 4 y Microsoft Excel con Power Pivot
 
@@ -786,24 +786,16 @@ También se identificó un límite del conjunto de datos: el archivo de ventas y
 
 [2] R. Kimball y M. Ross, *The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling*, 3.ª ed. Indianapolis, IN, EE. UU.: Wiley, 2013.
 
-[3] PostgreSQL Global Development Group, "COPY," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/sql-copy.html. [Accedido: 20-oct-2026].
+[3] pgAdmin Development Team, "ERD Tool," *pgAdmin 4 Documentation*. [En línea]. Disponible en: https://www.pgadmin.org/docs/pgadmin4/latest/erd_tool.html. [Accedido: 20-oct-2026].
 
-[4] PostgreSQL Global Development Group, "9.7. Pattern Matching," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/functions-matching.html. [Accedido: 20-oct-2026].
+[4] Microsoft, "Create relationships in Diagram View in Power Pivot," *Microsoft Support*. [En línea]. Disponible en: https://support.microsoft.com/en-US/Excel/create-relationships-in-diagram-view-in-power-pivot. [Accedido: 20-oct-2026].
 
-[5] PostgreSQL Global Development Group, "8.1. Numeric Types," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/datatype-numeric.html. [Accedido: 20-oct-2026].
-
-[6] pgAdmin Development Team, "Import/Export Data Dialog," *pgAdmin 4 Documentation*. [En línea]. Disponible en: https://www.pgadmin.org/docs/pgadmin4/latest/import_export_data.html. [Accedido: 20-oct-2026].
-
-[7] pgAdmin Development Team, "ERD Tool," *pgAdmin 4 Documentation*. [En línea]. Disponible en: https://www.pgadmin.org/docs/pgadmin4/latest/erd_tool.html. [Accedido: 20-oct-2026].
-
-[8] Microsoft, "Create relationships in Diagram View in Power Pivot," *Microsoft Support*. [En línea]. Disponible en: https://support.microsoft.com/en-US/Excel/create-relationships-in-diagram-view-in-power-pivot. [Accedido: 20-oct-2026].
-
-[9] PostgreSQL Global Development Group, "5.10. Schemas," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/ddl-schemas.html. [Accedido: 20-oct-2026].
+[5] PostgreSQL Global Development Group, "5.10. Schemas," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/ddl-schemas.html. [Accedido: 20-oct-2026].
 
 ---
 
 ## 9. Declaración de uso de inteligencia artificial
 
-En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en el análisis de los archivos, en el diseño del modelo dimensional, en la escritura y la prueba de los scripts SQL y del script de validación, en la ejecución de los pasos en pgAdmin y en Excel con supervisión del estudiante, y en la redacción y el formato del informe en Markdown. Las decisiones de contenido y la revisión final fueron del estudiante.
+En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en la redacción del informe de manera ordenada, el resto de la práctica fue realizada por los estudiantes del grupo: realizar los procedimientos, capturas, etc.
 
-**Porcentaje de uso de inteligencia artificial: 70 %**
+**Porcentaje de uso de inteligencia artificial: 30 %**
