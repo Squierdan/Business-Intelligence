@@ -15,7 +15,7 @@
 - Alexis Eduardo Sotomayor Llerena
 - Francisco Javier Torres Negrete
 
-**Fecha de entrega:** 14 de octubre de 2026
+**Fecha de entrega:** 20 de octubre de 2026
 
 **Herramientas:** Pentaho Data Integration Community Edition 10.2.0.0-222 con Java 21, PostgreSQL 17 y pgAdmin 4
 
@@ -446,6 +446,7 @@ Incluir un filtro de validación con una salida de registros observados hace que
 
 Los scripts de validación, que repiten el cálculo de forma independiente, dan seguridad de que lo cargado en PostgreSQL y en los archivos de salida es correcto.
 
+
 ---
 
 ## 5. Referencias
@@ -470,4 +471,4 @@ Los scripts de validación, que repiten el cálculo de forma independiente, dan 
 
 En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo para la redaccion del informe markdown. El resto como capturas y ejecucion paso a paso fue autoría de los estudiantes responsables de este informe.
 
-**Porcentaje de uso de inteligencia artificial: 30 %**
+**Porcentaje de uso de inteligencia artificial: 30% %**
