@@ -15,7 +15,7 @@
 - Alexis Eduardo Sotomayor Llerena
 - Francisco Javier Torres Negrete
 
-**Fecha de entrega:** 20 de octubre de 2026
+**Fecha de entrega:** 27 de octubre de 2026
 
 **Herramientas:** PostgreSQL 17, pgAdmin 4 y Microsoft Excel con Power Pivot
 
@@ -752,21 +752,7 @@ El script termina con el mensaje `Validacion correcta` cuando todos los controle
 
 ---
 
-## 6. Cómo reproducir el trabajo
-
-1. Clonar el repositorio y abrir pgAdmin con el servidor PostgreSQL 17.
-2. En la base de datos `Datawarehouse1`, abrir el Query Tool y ejecutar [01_ddl_parte1_dim_product.sql](sql/01_ddl_parte1_dim_product.sql).
-3. Importar [products.csv](datos/entrada/products.csv) en `stg_products` con la configuración de la Tabla 5.
-4. Ejecutar por bloques [02_dml_parte1_limpieza_carga.sql](sql/02_dml_parte1_limpieza_carga.sql) y después [03_consultas_parte1_dim_product.sql](sql/03_consultas_parte1_dim_product.sql).
-5. Ejecutar [04_ddl_parte2_estrella_ventas.sql](sql/04_ddl_parte2_estrella_ventas.sql). Crea el esquema `dw_ventas` y todas sus tablas.
-6. Importar [Tabla_Desnormalizada_Ventas.csv](datos/entrada/Tabla_Desnormalizada_Ventas.csv) en `dw_ventas.stg_ventas` con la configuración de la Tabla 14.
-7. Ejecutar por bloques [05_dml_parte2_limpieza_carga.sql](sql/05_dml_parte2_limpieza_carga.sql) y después [06_consultas_parte2_ventas.sql](sql/06_consultas_parte2_ventas.sql).
-8. Abrir [Modelo_Estrella_Ventas.xlsx](diagrama/Modelo_Estrella_Ventas.xlsx) en Excel y entrar en Power Pivot, Administrar, Vista de diagrama para ver el modelo.
-9. Para validar sin conectarse a la base, ejecutar el script de la sección 5.
-
----
-
-## 7. Conclusiones
+## 6. Conclusiones
 
 La Parte 1 muestra el recorrido completo de una dimensión: staging sin restricciones, validación frente a cifras conocidas, limpieza y carga con una clave sustituta. Medir los datos antes de limpiarlos fue lo que permitió descubrir que la fórmula de la guía deja un nombre con espacio al inicio y no reconoce seis nombres con espacio no separable. Con el orden corregido de `btrim` y la conversión previa del carácter 160, los 699 productos quedan sin anomalías.
 
@@ -780,30 +766,22 @@ También se identificó un límite del conjunto de datos: el archivo de ventas y
 
 ---
 
-## 8. Referencias
+## 7. Referencias
 
 [1] Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas, "Práctica 4. Implementación física de una dimensión para un modelo estrella en PostgreSQL," guía de práctica de la asignatura Business Intelligence, Quito, Ecuador, 2026.
 
 [2] R. Kimball y M. Ross, *The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling*, 3.ª ed. Indianapolis, IN, EE. UU.: Wiley, 2013.
 
-[3] PostgreSQL Global Development Group, "COPY," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/sql-copy.html. [Accedido: 20-oct-2026].
+[3] pgAdmin Development Team, "ERD Tool," *pgAdmin 4 Documentation*. [En línea]. Disponible en: https://www.pgadmin.org/docs/pgadmin4/latest/erd_tool.html. [Accedido: 20-oct-2026].
 
-[4] PostgreSQL Global Development Group, "9.7. Pattern Matching," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/functions-matching.html. [Accedido: 20-oct-2026].
+[4] Microsoft, "Create relationships in Diagram View in Power Pivot," *Microsoft Support*. [En línea]. Disponible en: https://support.microsoft.com/en-US/Excel/create-relationships-in-diagram-view-in-power-pivot. [Accedido: 20-oct-2026].
 
-[5] PostgreSQL Global Development Group, "8.1. Numeric Types," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/datatype-numeric.html. [Accedido: 20-oct-2026].
-
-[6] pgAdmin Development Team, "Import/Export Data Dialog," *pgAdmin 4 Documentation*. [En línea]. Disponible en: https://www.pgadmin.org/docs/pgadmin4/latest/import_export_data.html. [Accedido: 20-oct-2026].
-
-[7] pgAdmin Development Team, "ERD Tool," *pgAdmin 4 Documentation*. [En línea]. Disponible en: https://www.pgadmin.org/docs/pgadmin4/latest/erd_tool.html. [Accedido: 20-oct-2026].
-
-[8] Microsoft, "Create relationships in Diagram View in Power Pivot," *Microsoft Support*. [En línea]. Disponible en: https://support.microsoft.com/en-US/Excel/create-relationships-in-diagram-view-in-power-pivot. [Accedido: 20-oct-2026].
-
-[9] PostgreSQL Global Development Group, "5.10. Schemas," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/ddl-schemas.html. [Accedido: 20-oct-2026].
+[5] PostgreSQL Global Development Group, "5.10. Schemas," *PostgreSQL 17 Documentation*. [En línea]. Disponible en: https://www.postgresql.org/docs/17/ddl-schemas.html. [Accedido: 20-oct-2026].
 
 ---
 
-## 9. Declaración de uso de inteligencia artificial
+## 8. Declaración de uso de inteligencia artificial
 
-En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en el análisis de los archivos, en el diseño del modelo dimensional, en la escritura y la prueba de los scripts SQL y del script de validación, en la ejecución de los pasos en pgAdmin y en Excel con supervisión del estudiante, y en la redacción y el formato del informe en Markdown. Las decisiones de contenido y la revisión final fueron del estudiante.
+En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en la redacción del informe de manera ordenada, el resto de la práctica fue realizada por los estudiantes del grupo: realizar los procedimientos, capturas, etc.
 
-**Porcentaje de uso de inteligencia artificial: 70 %**
+**Porcentaje de uso de inteligencia artificial: 30 %**
