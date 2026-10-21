@@ -46,10 +46,9 @@
    7. [Script DML de limpieza y carga](#47-script-dml-de-limpieza-y-carga)
    8. [Consultas de negocio](#48-consultas-de-negocio)
 5. [Validación independiente](#5-validación-independiente)
-6. [Cómo reproducir el trabajo](#6-cómo-reproducir-el-trabajo)
-7. [Conclusiones](#7-conclusiones)
-8. [Referencias](#8-referencias)
-9. [Declaración de uso de inteligencia artificial](#9-declaración-de-uso-de-inteligencia-artificial)
+6. [Conclusiones](#6-conclusiones)
+7. [Referencias](#7-referencias)
+8. [Declaración de uso de inteligencia artificial](#8-declaración-de-uso-de-inteligencia-artificial)
 
 ---
 
