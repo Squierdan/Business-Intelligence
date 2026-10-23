@@ -540,6 +540,7 @@ La consulta de comprobación de la guía agrupa solo por mes y suma en el mes 5 
 
 ## 12. Declaración de uso de inteligencia artificial
 
-En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en el análisis de la guía y del archivo de datos, en la construcción y la ejecución de las transformaciones y del job en Spoon, en la ejecución de las consultas en pgAdmin, en la escritura del script de validación y en la redacción y el formato del informe en Markdown. Las decisiones de diseño y la revisión final fueron del grupo.
+En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en el análisis de la guía y del archivo de datos. 
+La construcción y la ejecución de las transformaciones y del job en Spoon, la ejecución de las consultas en pgAdmin, la escritura del script de validación, las decisiones de diseño y la revisión final fueron del grupo.
 
-**Porcentaje de uso de inteligencia artificial: 70 %**
+**Porcentaje de uso de inteligencia artificial: 20 %**
