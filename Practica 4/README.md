@@ -45,10 +45,9 @@
    6. [Importación al área de staging](#46-importación-al-área-de-staging)
    7. [Script DML de limpieza y carga](#47-script-dml-de-limpieza-y-carga)
    8. [Consultas de negocio](#48-consultas-de-negocio)
-5. [Validación independiente](#5-validación-independiente)
-6. [Conclusiones](#6-conclusiones)
-7. [Referencias](#7-referencias)
-8. [Declaración de uso de inteligencia artificial](#8-declaración-de-uso-de-inteligencia-artificial)
+5. [Conclusiones](#6-conclusiones)
+6. [Referencias](#7-referencias)
+7. [Declaración de uso de inteligencia artificial](#8-declaración-de-uso-de-inteligencia-artificial)
 
 ---
 
@@ -726,32 +725,7 @@ Los productos de tamaño Medium son los que más ingreso generan, con 34218 entr
 
 ---
 
-## 5. Validación independiente
-
-El script [validar_resultados.py](validacion/validar_resultados.py) recalcula en Python, con la biblioteca estándar y a partir de los archivos de entrada, todo lo que se obtuvo en SQL, y lo compara con los CSV de [datos/salida](datos/salida/). No usa nada de lo que produjo PostgreSQL, así que sirve como control externo. La Tabla 23 resume los controles.
-
-**Tabla 23.** Controles del script de validación
-
-| Control | Resultado |
-|---|---|
-| `products.csv`: 699 registros, 699 identificadores únicos, 10 categorías y 53 subcategorías | Correcto |
-| `dim_product.csv` coincide campo por campo con una limpieza independiente | Correcto |
-| Claves sustitutas de `dim_product` consecutivas de 1 a 699 | Correcto |
-| `dim_product.csv` sin tabulaciones ni espacios sobrantes | Correcto |
-| Siete consultas de ventas recalculadas desde `Tabla_Desnormalizada_Ventas.csv` | Coinciden con los CSV de salida |
-| Ventas totales y unidades totales | 69547 y 296 |
-
-Para ejecutarlo, desde la raíz del repositorio:
-
-```bat
-python "Practica 4\validacion\validar_resultados.py"
-```
-
-El script termina con el mensaje `Validacion correcta` cuando todos los controles pasan.
-
----
-
-## 6. Conclusiones
+## 5. Conclusiones
 
 La Parte 1 muestra el recorrido completo de una dimensión: staging sin restricciones, validación frente a cifras conocidas, limpieza y carga con una clave sustituta. Medir los datos antes de limpiarlos fue lo que permitió descubrir que la fórmula de la guía deja un nombre con espacio al inicio y no reconoce seis nombres con espacio no separable. Con el orden corregido de `btrim` y la conversión previa del carácter 160, los 699 productos quedan sin anomalías.
 
@@ -765,7 +739,7 @@ También se identificó un límite del conjunto de datos: el archivo de ventas y
 
 ---
 
-## 7. Referencias
+## 6. Referencias
 
 [1] Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas, "Práctica 4. Implementación física de una dimensión para un modelo estrella en PostgreSQL," guía de práctica de la asignatura Business Intelligence, Quito, Ecuador, 2026.
 
@@ -779,7 +753,7 @@ También se identificó un límite del conjunto de datos: el archivo de ventas y
 
 ---
 
-## 8. Declaración de uso de inteligencia artificial
+## 7. Declaración de uso de inteligencia artificial
 
 En la elaboración de este trabajo se utilizó el asistente de inteligencia artificial Claude como apoyo en la redacción del informe de manera ordenada, el resto de la práctica fue realizada por los estudiantes del grupo: realizar los procedimientos, capturas, etc.
 
