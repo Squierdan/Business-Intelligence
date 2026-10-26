@@ -45,9 +45,9 @@
    6. [Importación al área de staging](#46-importación-al-área-de-staging)
    7. [Script DML de limpieza y carga](#47-script-dml-de-limpieza-y-carga)
    8. [Consultas de negocio](#48-consultas-de-negocio)
-5. [Conclusiones](#6-conclusiones)
-6. [Referencias](#7-referencias)
-7. [Declaración de uso de inteligencia artificial](#8-declaración-de-uso-de-inteligencia-artificial)
+5. [Conclusiones](#5-conclusiones)
+6. [Referencias](#6-referencias)
+7. [Declaración de uso de inteligencia artificial](#7-declaración-de-uso-de-inteligencia-artificial)
 
 ---
 
